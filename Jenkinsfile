@@ -39,5 +39,13 @@ pipeline {
                 }
             }
         }
+
+        stage("Quality Gate") {
+            steps {
+                script{
+
+                }
+            }
+        }
     }
 }
