@@ -38,7 +38,8 @@ pipeline{
             steps {
                 withSonarQubeEnv(credentialsId: 'jenkins') {
                 sh "mvn sonar:sonar"
-            }
+                }
+             }
         }
     }
 }
