@@ -1,48 +1,43 @@
-pipeline{
-    agent{
+pipeline {
+    agent {
         label "jenkins-agent"
     }
     tools {
         jdk 'Java17'
         maven 'Maven3'
     }
- 
-    stages{
-        stage("Cleanup Workspace"){
+
+    stages {
+        stage("Cleanup Workspace") {
             steps {
                 cleanWs()
             }
-
         }
 
-        stage("Checkout from SCM"){
+        stage("Checkout from SCM") {
             steps {
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/silviuh/complete-prodcution-e2e-pipeline.git'
             }
-
         }
 
-        stage("Build Application"){
+        stage("Build Application") {
             steps {
                 sh "mvn clean package"
             }
         }
 
-        stage("Test Application"){
+        stage("Test Application") {
             steps {
                 sh "mvn test"
             }
         }
 
-         stage("Sonarqube Analysis") {
+        stage("Sonarqube Analysis") {
             steps {
-                script {
-                withSonarQubeEnv(installationName: 'sonarqube-scanner', credentialsId: 'jenkins') {
-                        sh "mvn sonar:sonar"
-                    }
+                withSonarQubeEnv(installationName: 'sonarqube-scanner', credentialsId: 'jenkins-sonarqube-token') {
+                    sh "mvn sonar:sonar"
                 }
-             }
+            }
         }
     }
 }
-
